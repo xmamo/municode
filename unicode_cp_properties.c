@@ -12,7 +12,7 @@ struct Unicode_properties {
 
 typedef struct _Unicode_properties_table {
   const size_t count;
-  const Unicode_properties* const properties;
+  const Unicode_properties* const head;
 } _Unicode_properties_table;
 
 #include "unicode_cp_properties.inc"
@@ -30,7 +30,7 @@ const Unicode_properties* unicode_cp_properties(char32_t cp) {
   const _Unicode_properties_table* table = _unicode_properties_tables + (cp >> 16);
 
   if ((cp & 0xFFFF) < table->count) {
-    const Unicode_properties* properties = table->properties + (cp & 0xFFFF);
+    const Unicode_properties* properties = table->head + (cp & 0xFFFF);
 
     if (properties != NULL)
       return properties;
