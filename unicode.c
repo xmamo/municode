@@ -20,7 +20,11 @@ char32_t unicode_utf8_next(const char** utf8) {
         cp = (cp << 6) | ((*utf8)[i] & 0x3F);
       }
 
-      return length == unicode_cp_utf8_length(cp) ? cp : -1;
+      if (length != unicode_cp_utf8_length(cp))
+        return -1;
+
+      utf8 += length;
+      return cp;
     }
   }
 
