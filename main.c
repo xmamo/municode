@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
   }
 
   assert(unicode_properties_is_uppercase(unicode_cp_properties('A')));
-  assert(unicode_properties_is_lowercase(unicode_cp_properties('A')));
+  assert(unicode_properties_is_lowercase(unicode_cp_properties('a')));
 
   return EXIT_SUCCESS;
 }
