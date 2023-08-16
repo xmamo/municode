@@ -64,7 +64,7 @@ class Properties:
 
 def handle_code_point(
     code_point: ET.Element,
-    properties_maps: list[list[Properties]],
+    properties_tables: list[list[Properties]],
     group: Optional[ET.Element] = None
 ) -> None:
     cp = ''
@@ -96,7 +96,7 @@ def handle_code_point(
         name = name_alias.get('alias', name)
 
     for cp in range(first_cp, last_cp + 1):
-        properties = properties_maps[cp >> 16][cp & 0xFFFF]
+        properties = properties_tables[cp >> 16][cp & 0xFFFF]
         properties.set_name(name.replace('#', f'{cp:04X}'))
         properties.set_general_category(general_category)
         properties.set_other_uppercase(other_uppercase)
@@ -104,26 +104,26 @@ def handle_code_point(
 
 
 if __name__ == '__main__':
-    maps = [[Properties() for _ in range(0xFFFF + 1)] for _ in range(0x10 + 1)]
+    tables = [[Properties() for _ in range(0xFFFF + 1)] for _ in range(0x10 + 1)]
     tree = ET.parse('ucd.all.grouped.xml')
 
     for element in tree.iterfind('{*}repertoire/*'):
         if re.fullmatch(r'{.*}group', element.tag) is None:
-            handle_code_point(element, maps)
+            handle_code_point(element, tables)
         else:
             for code_point in element.iterfind('*'):
-                handle_code_point(code_point, maps, element)
+                handle_code_point(code_point, tables, element)
 
-    with open('unicode_database.inc', 'w') as f:
-        f.write('static const _Unicode_properties_map _unicode_properties_maps[] = {\n')
+    with open('unicode_cp_properties.inc', 'w') as f:
+        f.write('static const _Unicode_properties_table _unicode_properties_tables[] = {\n')
 
-        for i, map in enumerate(maps):
+        for i, table in enumerate(tables):
             while True:
                 updated = False
 
-                for i in range(len(map) - 1, -1, -1):
-                    if map[i].general_category in ['SURROGATE', 'PRIVATE_USE', 'UNASSIGNED']:
-                        del map[i]
+                for j in range(len(table) - 1, -1, -1):
+                    if table[j].general_category in ['SURROGATE', 'PRIVATE_USE', 'UNASSIGNED']:
+                        del table[j]
                         updated = True
                     else:
                         break
@@ -131,13 +131,13 @@ if __name__ == '__main__':
                 if not updated:
                     break
 
-            if map == []:
+            if table == []:
                 f.write('  {0, NULL},\n')
             else:
-                f.write(f'  {{{len(map)}, (const _Unicode_properties[]){{\n')
+                f.write(f'  {{{len(table)}, (const Unicode_properties[]){{\n')
 
-                for properties in map:
-                    f.write(f'    {properties},\n')
+                for cp, properties in enumerate(table):
+                    f.write(f'    /* U+{((i << 16) | cp):04X} */  {properties},\n')
 
                 f.write('  }},\n')
 

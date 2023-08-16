@@ -4,6 +4,6 @@
 /main
 /ucd.all.grouped.xml
 /ucd.all.grouped.zip
-/unicode_database.inc
+/unicode_cp_categories.inc
 
 .DS_STORE
