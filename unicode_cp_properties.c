@@ -6,8 +6,8 @@
 struct Unicode_properties {
   const char* const name;
   Unicode_general_category general_category;
-  bool other_uppercase;
-  bool other_lowercase;
+  bool is_other_uppercase;
+  bool is_other_lowercase;
 };
 
 typedef struct _Unicode_properties_table {
@@ -53,18 +53,18 @@ Unicode_general_category unicode_properties_general_category(const Unicode_prope
   return properties->general_category;
 }
 
-bool unicode_properties_other_uppercase(const Unicode_properties* properties) {
-  return properties->other_uppercase;
+bool unicode_properties_is_uppercase(const Unicode_properties* properties) {
+  return properties->general_category == UNICODE_UPPERCASE_LETTER || properties->is_other_uppercase;
 }
 
-bool unicode_properties_other_lowercase(const Unicode_properties* properties) {
-  return properties->other_lowercase;
+bool unicode_properties_is_lowercase(const Unicode_properties* properties) {
+  return properties->general_category == UNICODE_LOWERCASE_LETTER || properties->is_other_lowercase;
 }
 
-bool unicode_properties_uppercase(const Unicode_properties* properties) {
-  return properties->general_category == UNICODE_UPPERCASE_LETTER || properties->other_uppercase;
+bool unicode_properties_is_other_uppercase(const Unicode_properties* properties) {
+  return properties->is_other_uppercase;
 }
 
-bool unicode_properties_lowercase(const Unicode_properties* properties) {
-  return properties->general_category == UNICODE_LOWERCASE_LETTER || properties->other_lowercase;
+bool unicode_properties_is_other_lowercase(const Unicode_properties* properties) {
+  return properties->is_other_lowercase;
 }

@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 #include "unicode.h"
@@ -25,8 +24,8 @@ int main(int argc, char** argv) {
     assert(unicode_utf8_next(&string) == table[i].cp);
   }
 
-  assert(unicode_properties_uppercase(unicode_cp_properties('A')));
-  assert(unicode_properties_lowercase(unicode_cp_properties('A')));
+  assert(unicode_properties_is_uppercase(unicode_cp_properties('A')));
+  assert(unicode_properties_is_lowercase(unicode_cp_properties('A')));
 
   return EXIT_SUCCESS;
 }

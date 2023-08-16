@@ -83,12 +83,12 @@ const char* unicode_properties_name(const Unicode_properties* properties);
 
 Unicode_general_category unicode_properties_general_category(const Unicode_properties* properties);
 
-bool unicode_properties_other_uppercase(const Unicode_properties* properties);
+bool unicode_properties_is_uppercase(const Unicode_properties* properties);
 
-bool unicode_properties_other_lowercase(const Unicode_properties* properties);
+bool unicode_properties_is_lowercase(const Unicode_properties* properties);
 
-bool unicode_properties_uppercase(const Unicode_properties* properties);
+bool unicode_properties_is_other_uppercase(const Unicode_properties* properties);
 
-bool unicode_properties_lowercase(const Unicode_properties* properties);
+bool unicode_properties_is_other_lowercase(const Unicode_properties* properties);
 
 #endif
