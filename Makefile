@@ -1,3 +1,6 @@
+.PHONY: all
+all: main
+
 main: main.o unicode.o unicode_database.o
 
 unicode_database.o: unicode.h unicode_database.inc
