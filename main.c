@@ -25,10 +25,8 @@ int main(int argc, char** argv) {
     assert(unicode_utf8_next(&string) == table[i].cp);
   }
 
-  puts(unicode_name(0x1FBA8));
-
-  assert(unicode_is_uppercase('A'));
-  assert(unicode_is_lowercase('a'));
+  assert(unicode_properties_uppercase(unicode_cp_properties('A')));
+  assert(unicode_properties_lowercase(unicode_cp_properties('A')));
 
   return EXIT_SUCCESS;
 }

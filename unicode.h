@@ -5,6 +5,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+typedef uint_least32_t char32_t;
+
 typedef enum Unicode_general_category {
   UNICODE_UPPERCASE_LETTER,
   UNICODE_LOWERCASE_LETTER,
@@ -69,18 +71,24 @@ typedef enum Unicode_general_category {
 #define UNICODE_CO (UNICODE_PRIVATE_USE)
 #define UNICODE_CN (UNICODE_UNASSIGNED)
 
-typedef uint_least32_t char32_t;
-
-size_t unicode_cp_utf8_length(char32_t cp);
+typedef struct Unicode_properties Unicode_properties;
 
 char32_t unicode_utf8_next(const char** utf8);
 
-const char* unicode_name(char32_t cp);
+size_t unicode_cp_utf8_length(char32_t cp);
 
-Unicode_general_category unicode_general_category(char32_t cp);
+const Unicode_properties* unicode_cp_properties(char32_t cp);
 
-bool unicode_is_uppercase(char32_t cp);
+const char* unicode_properties_name(const Unicode_properties* properties);
 
-bool unicode_is_lowercase(char32_t cp);
+Unicode_general_category unicode_properties_general_category(const Unicode_properties* properties);
+
+bool unicode_properties_other_uppercase(const Unicode_properties* properties);
+
+bool unicode_properties_other_lowercase(const Unicode_properties* properties);
+
+bool unicode_properties_uppercase(const Unicode_properties* properties);
+
+bool unicode_properties_lowercase(const Unicode_properties* properties);
 
 #endif

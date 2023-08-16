@@ -1,17 +1,5 @@
 #include "unicode.h"
 
-size_t unicode_cp_utf8_length(char32_t cp) {
-  static const char32_t table[] =
-    {0xFFFFFF80, 0xFFFFF800, 0xFFFF0000, 0xFFE00000};
-
-  for (size_t i = 0; i < sizeof(table) / sizeof(*table); ++i) {
-    if ((cp & table[i]) == 0)
-      return i + 1;
-  }
-
-  return 0;
-}
-
 char32_t unicode_utf8_next(const char** utf8) {
   static const int table[][3] = {
     {0x80, 0x00, 0x7F},
@@ -37,4 +25,16 @@ char32_t unicode_utf8_next(const char** utf8) {
   }
 
   return -1;
+}
+
+size_t unicode_cp_utf8_length(char32_t cp) {
+  static const char32_t table[] =
+    {0xFFFFFF80, 0xFFFFF800, 0xFFFF0000, 0xFFE00000};
+
+  for (size_t i = 0; i < sizeof(table) / sizeof(*table); ++i) {
+    if ((cp & table[i]) == 0)
+      return i + 1;
+  }
+
+  return 0;
 }

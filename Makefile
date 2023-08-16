@@ -1,12 +1,12 @@
 .PHONY: all
 all: main
 
-main: main.o unicode.o unicode_database.o
+main: main.o unicode.o unicode_cp_properties.o
 
-unicode_database.o: unicode.h unicode_database.inc
+unicode_cp_properties.o: unicode.h unicode_cp_properties.inc
 
-unicode_database.inc: generate_unicode_database.py ucd.all.grouped.xml
-	python3 generate_unicode_database.py
+unicode_cp_properties.inc: generate_unicode_cp_properties.py ucd.all.grouped.xml
+	python3 generate_unicode_cp_properties.py
 
 ucd.all.grouped.xml: ucd.all.grouped.zip
 	unzip -uo ucd.all.grouped.zip
@@ -16,7 +16,7 @@ ucd.all.grouped.zip:
 
 .PHONY: clean
 clean:
-	rm -f ucd.all.grouped.xml unicode_database.inc *.o main
+	rm -f ucd.all.grouped.xml unicode_cp_properties.inc *.o main
 
 .PHONY: clean!
 clean!: clean
