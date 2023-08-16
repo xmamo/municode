@@ -1,7 +1,7 @@
 #include "unicode.h"
 
-#include <assert.h>
 #include <stdbool.h>
+#include <stddef.h>
 
 typedef struct _Unicode_properties {
   const char* const name;
