@@ -1,0 +1,14 @@
+FormatStyle: file
+
+Checks: >-
+  bugprone-*,
+  concurrency-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  -bugprone-reserved-identifier,
+  -readability-braces-around-statements,
+  -readability-identifier-length,
+  -readability-magic-numbers
