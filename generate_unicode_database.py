@@ -3,49 +3,63 @@ import xml.etree.ElementTree as ET
 from typing import Optional
 
 
-GENERAL_CATEGORIES = {
-    'Lu': 'UNICODE_UPPERCASE_LETTER',
-    'Ll': 'UNICODE_LOWERCASE_LETTER',
-    'Lt': 'UNICODE_TITLECASE_LETTER',
-    'Lm': 'UNICODE_MODIFIER_LETTER',
-    'Lo': 'UNICODE_OTHER_LETTER',
-    'Mn': 'UNICODE_NONSPACING_MARK',
-    'Mc': 'UNICODE_SPACING_MARK',
-    'Me': 'UNICODE_ENCLOSING_MARK',
-    'Nd': 'UNICODE_DECIMAL_NUMBER',
-    'Nl': 'UNICODE_LETTER_NUMBER',
-    'No': 'UNICODE_OTHER_NUMBER',
-    'Pc': 'UNICODE_CONNECTOR_PUNCTUATION',
-    'Pd': 'UNICODE_DASH_PUNCTUATION',
-    'Ps': 'UNICODE_OPEN_PUNCTUATION',
-    'Pe': 'UNICODE_CLOSE_PUNCTUATION',
-    'Pi': 'UNICODE_INITIAL_PUNCTUATION',
-    'Pf': 'UNICODE_FINAL_PUNCTUATION',
-    'Po': 'UNICODE_OTHER_PUNCTUATION',
-    'Sm': 'UNICODE_MATH_SYMBOL',
-    'Sc': 'UNICODE_CURRENCY_SYMBOL',
-    'Sk': 'UNICODE_MODIFIER_SYMBOL',
-    'So': 'UNICODE_OTHER_SYMBOL',
-    'Zs': 'UNICODE_SPACE_SEPARATOR',
-    'Zl': 'UNICODE_LINE_SEPARATOR',
-    'Zp': 'UNICODE_PARAGRAPH_SEPARATOR',
-    'Cc': 'UNICODE_CONTROL',
-    'Cf': 'UNICODE_FORMAT',
-    'Cs': 'UNICODE_SURROGATE',
-    'Co': 'UNICODE_PRIVATE_USE',
-    'Cn': 'UNICODE_UNASSIGNED',
-}
-
-
 class Properties:
     def __init__(self) -> None:
-        self.name = ''
-        self.general_category = ''
+        self.name = None
+        self.general_category = None
+        self.other_uppercase = False
+        self.other_lowercase = False
+
+    def set_name(self, name: str) -> None:
+        self.name = name if name != '' else None
+
+    def set_general_category(self, general_category: str) -> None:
+        self.general_category = {
+            'Lu': 'UPPERCASE_LETTER',
+            'Ll': 'LOWERCASE_LETTER',
+            'Lt': 'TITLECASE_LETTER',
+            'Lm': 'MODIFIER_LETTER',
+            'Lo': 'OTHER_LETTER',
+            'Mn': 'NONSPACING_MARK',
+            'Mc': 'SPACING_MARK',
+            'Me': 'ENCLOSING_MARK',
+            'Nd': 'DECIMAL_NUMBER',
+            'Nl': 'LETTER_NUMBER',
+            'No': 'OTHER_NUMBER',
+            'Pc': 'CONNECTOR_PUNCTUATION',
+            'Pd': 'DASH_PUNCTUATION',
+            'Ps': 'OPEN_PUNCTUATION',
+            'Pe': 'CLOSE_PUNCTUATION',
+            'Pi': 'INITIAL_PUNCTUATION',
+            'Pf': 'FINAL_PUNCTUATION',
+            'Po': 'OTHER_PUNCTUATION',
+            'Sm': 'MATH_SYMBOL',
+            'Sc': 'CURRENCY_SYMBOL',
+            'Sk': 'MODIFIER_SYMBOL',
+            'So': 'OTHER_SYMBOL',
+            'Zs': 'SPACE_SEPARATOR',
+            'Zl': 'LINE_SEPARATOR',
+            'Zp': 'PARAGRAPH_SEPARATOR',
+            'Cc': 'CONTROL',
+            'Cf': 'FORMAT',
+            'Cs': 'SURROGATE',
+            'Co': 'PRIVATE_USE',
+            'Cn': 'UNASSIGNED',
+            '': None,
+        }[general_category]
+
+    def set_other_uppercase(self, other_uppercase: str) -> None:
+        self.other_uppercase = {'N': False, 'Y': True}[other_uppercase]
+
+    def set_other_lowercase(self, other_lowercase: str) -> None:
+        self.other_lowercase = {'N': False, 'Y': True}[other_lowercase]
 
     def __str__(self) -> str:
-        name = f'"{self.name}"' if self.name != '' else 'NULL'
-        general_catrgory = GENERAL_CATEGORIES[self.general_category] if self.general_category != '' else '-1'
-        return f'{{{name}, {general_catrgory}}}'
+        name = 'NULL' if self.name is None else f'"{self.name}"'
+        general_catrgory = '-1' if self.general_category is None else f'UNICODE_{self.general_category}'
+        other_uppercase = str(self.other_uppercase).lower()
+        other_lowercase = str(self.other_lowercase).lower()
+        return f'{{{name}, {general_catrgory}, {other_uppercase}, {other_lowercase}}}'
 
 
 def handle_code_point(
@@ -58,6 +72,8 @@ def handle_code_point(
     last_cp = ''
     name = ''
     general_category = ''
+    other_uppercase = ''
+    other_lowercase = ''
 
     for element in [code_point] if group is None else [group, code_point]:
         cp = element.get('cp', cp)
@@ -65,6 +81,8 @@ def handle_code_point(
         last_cp = element.get('last-cp', last_cp)
         name = element.get('na', name)
         general_category = element.get('gc', general_category)
+        other_uppercase = element.get('OUpper', other_uppercase)
+        other_lowercase = element.get('OLower', other_lowercase)
 
     if cp != '':
         cp = int(cp, 16)
@@ -78,8 +96,11 @@ def handle_code_point(
         name = name_alias.get('alias', name)
 
     for cp in range(first_cp, last_cp + 1):
-        properties_maps[cp >> 16][cp & 0xFFFF].name = name.replace('#', f'{cp:04X}')
-        properties_maps[cp >> 16][cp & 0xFFFF].general_category = general_category
+        properties = properties_maps[cp >> 16][cp & 0xFFFF]
+        properties.set_name(name.replace('#', f'{cp:04X}'))
+        properties.set_general_category(general_category)
+        properties.set_other_uppercase(other_uppercase)
+        properties.set_other_lowercase(other_lowercase)
 
 
 if __name__ == '__main__':
@@ -97,11 +118,11 @@ if __name__ == '__main__':
         f.write('static const _Unicode_properties_map _unicode_properties_maps[] = {\n')
 
         for i, map in enumerate(maps):
-            while True:  # Exclude last surrogate, private use, and not assigned code points
+            while True:
                 updated = False
 
                 for i in range(len(map) - 1, -1, -1):
-                    if map[i].general_category in ['Cs', 'Co', 'Cn']:
+                    if map[i].general_category in ['SURROGATE', 'PRIVATE_USE', 'UNASSIGNED']:
                         del map[i]
                         updated = True
                     else:

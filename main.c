@@ -27,5 +27,8 @@ int main(int argc, char** argv) {
 
   puts(unicode_name(0x1FBA8));
 
+  assert(unicode_is_uppercase('A'));
+  assert(unicode_is_lowercase('a'));
+
   return EXIT_SUCCESS;
 }

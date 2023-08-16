@@ -6,6 +6,8 @@
 typedef struct _Unicode_properties {
   const char* const name;
   Unicode_general_category general_category;
+  bool other_uppercase;
+  bool other_lowercase;
 } _Unicode_properties;
 
 typedef struct _Unicode_properties_map {
@@ -54,4 +56,24 @@ Unicode_general_category unicode_general_category(char32_t cp) {
     return UNICODE_PRIVATE_USE;
 
   return UNICODE_UNASSIGNED;
+}
+
+bool unicode_is_uppercase(char32_t cp) {
+  const _Unicode_properties* properties = NULL;
+  _unicode_properties(cp, &properties);
+
+  if (properties == NULL)
+    return false;
+
+  return properties->general_category == UNICODE_UPPERCASE_LETTER || properties->other_uppercase;
+}
+
+bool unicode_is_lowercase(char32_t cp) {
+  const _Unicode_properties* properties = NULL;
+  _unicode_properties(cp, &properties);
+
+  if (properties == NULL)
+    return false;
+
+  return properties->general_category == UNICODE_LOWERCASE_LETTER || properties->other_lowercase;
 }

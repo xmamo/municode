@@ -1,6 +1,7 @@
 #ifndef UNICODE_H
 #define UNICODE_H
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -77,5 +78,9 @@ char32_t unicode_utf8_next(const char** utf8);
 const char* unicode_name(char32_t cp);
 
 Unicode_general_category unicode_general_category(char32_t cp);
+
+bool unicode_is_uppercase(char32_t cp);
+
+bool unicode_is_lowercase(char32_t cp);
 
 #endif
