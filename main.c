@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
   static const struct {
     const char* string;
     char32_t cp;
-  } table[] = {
+  } TABLE[] = {
     {"\x4D", 0x4D},
     {"\xD0\xB0", 0x430},
     {"\xE4\xBA\x8C", 0x4E8C},
@@ -19,13 +19,13 @@ int main(int argc, char** argv) {
     {"\xE0\x9F\x80", -1},
   };
 
-  for (size_t i = 0; i < sizeof(table) / sizeof(*table); ++i) {
-    const char* string = table[i].string;
-    assert(unicode_utf8_next(&string) == table[i].cp);
+  for (size_t i = 0; i < sizeof(TABLE) / sizeof(*TABLE); ++i) {
+    const char* string = TABLE[i].string;
+    assert(mu_utf8_next(&string) == TABLE[i].cp);
   }
 
-  assert(unicode_properties_is_uppercase(unicode_cp_properties('A')));
-  assert(unicode_properties_is_lowercase(unicode_cp_properties('a')));
+  assert(mu_properties_is_uppercase(mu_cp_properties('A')));
+  assert(mu_properties_is_lowercase(mu_cp_properties('a')));
 
   return EXIT_SUCCESS;
 }

@@ -56,7 +56,7 @@ class Properties:
 
     def __str__(self) -> str:
         name = 'NULL' if self.name is None else f'"{self.name}"'
-        general_catrgory = '-1' if self.general_category is None else f'UNICODE_{self.general_category}'
+        general_catrgory = '-1' if self.general_category is None else f'MU_{self.general_category}'
         other_uppercase = str(self.other_uppercase).lower()
         other_lowercase = str(self.other_lowercase).lower()
         return f'{{{name}, {general_catrgory}, {other_uppercase}, {other_lowercase}}}'
@@ -115,7 +115,7 @@ if __name__ == '__main__':
                 handle_code_point(code_point, tables, element)
 
     with open('unicode_cp_properties.inc', 'w') as f:
-        f.write('static const _Unicode_properties_table _unicode_properties_tables[] = {\n')
+        f.write('static const _PropertiesTable _PROPERTIES_TABLES[] = {\n')
 
         for i, table in enumerate(tables):
             for j in range(len(table) - 1, -1, -1):
@@ -127,7 +127,7 @@ if __name__ == '__main__':
             if table == []:
                 f.write('  {0, NULL},\n')
             else:
-                f.write(f'  {{{len(table)}, (const Unicode_properties[]){{\n')
+                f.write(f'  {{{len(table)}, (const MuProperties[]){{\n')
 
                 for cp, properties in enumerate(table):
                     f.write(f'    /* U+{((i << 16) | cp):04X} */ {properties},\n')

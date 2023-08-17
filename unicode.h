@@ -7,88 +7,53 @@
 
 typedef uint_least32_t char32_t;
 
-typedef enum Unicode_general_category {
-  UNICODE_UPPERCASE_LETTER,
-  UNICODE_LOWERCASE_LETTER,
-  UNICODE_TITLECASE_LETTER,
-  UNICODE_MODIFIER_LETTER,
-  UNICODE_OTHER_LETTER,
-  UNICODE_NONSPACING_MARK,
-  UNICODE_SPACING_MARK,
-  UNICODE_ENCLOSING_MARK,
-  UNICODE_DECIMAL_NUMBER,
-  UNICODE_LETTER_NUMBER,
-  UNICODE_OTHER_NUMBER,
-  UNICODE_CONNECTOR_PUNCTUATION,
-  UNICODE_DASH_PUNCTUATION,
-  UNICODE_OPEN_PUNCTUATION,
-  UNICODE_CLOSE_PUNCTUATION,
-  UNICODE_INITIAL_PUNCTUATION,
-  UNICODE_FINAL_PUNCTUATION,
-  UNICODE_OTHER_PUNCTUATION,
-  UNICODE_MATH_SYMBOL,
-  UNICODE_CURRENCY_SYMBOL,
-  UNICODE_MODIFIER_SYMBOL,
-  UNICODE_OTHER_SYMBOL,
-  UNICODE_SPACE_SEPARATOR,
-  UNICODE_LINE_SEPARATOR,
-  UNICODE_PARAGRAPH_SEPARATOR,
-  UNICODE_CONTROL,
-  UNICODE_FORMAT,
-  UNICODE_SURROGATE,
-  UNICODE_PRIVATE_USE,
-  UNICODE_UNASSIGNED,
-} Unicode_general_category;
+typedef enum MuCategory {
+  MU_UPPERCASE_LETTER,
+  MU_LOWERCASE_LETTER,
+  MU_TITLECASE_LETTER,
+  MU_MODIFIER_LETTER,
+  MU_OTHER_LETTER,
+  MU_NONSPACING_MARK,
+  MU_SPACING_MARK,
+  MU_ENCLOSING_MARK,
+  MU_DECIMAL_NUMBER,
+  MU_LETTER_NUMBER,
+  MU_OTHER_NUMBER,
+  MU_CONNECTOR_PUNCTUATION,
+  MU_DASH_PUNCTUATION,
+  MU_OPEN_PUNCTUATION,
+  MU_CLOSE_PUNCTUATION,
+  MU_INITIAL_PUNCTUATION,
+  MU_FINAL_PUNCTUATION,
+  MU_OTHER_PUNCTUATION,
+  MU_MATH_SYMBOL,
+  MU_CURRENCY_SYMBOL,
+  MU_MODIFIER_SYMBOL,
+  MU_OTHER_SYMBOL,
+  MU_SPACE_SEPARATOR,
+  MU_LINE_SEPARATOR,
+  MU_PARAGRAPH_SEPARATOR,
+  MU_CONTROL,
+  MU_FORMAT,
+  MU_SURROGATE,
+  MU_PRIVATE_USE,
+  MU_UNASSIGNED,
+} MuCategory;
 
-#define UNICODE_LU (UNICODE_UPPERCASE_LETTER)
-#define UNICODE_LL (UNICODE_LOWERCASE_LETTER)
-#define UNICODE_LT (UNICODE_TITLECASE_LETTER)
-#define UNICODE_LM (UNICODE_MODIFIER_LETTER)
-#define UNICODE_LO (UNICODE_OTHER_LETTER)
-#define UNICODE_MN (UNICODE_NONSPACING_MARK)
-#define UNICODE_MC (UNICODE_SPACING_MARK)
-#define UNICODE_ME (UNICODE_ENCLOSING_MARK)
-#define UNICODE_ND (UNICODE_DECIMAL_NUMBER)
-#define UNICODE_NL (UNICODE_LETTER_NUMBER)
-#define UNICODE_NO (UNICODE_OTHER_NUMBER)
-#define UNICODE_PC (UNICODE_CONNECTOR_PUNCTUATION)
-#define UNICODE_PD (UNICODE_DASH_PUNCTUATION)
-#define UNICODE_PS (UNICODE_OPEN_PUNCTUATION)
-#define UNICODE_PE (UNICODE_CLOSE_PUNCTUATION)
-#define UNICODE_PI (UNICODE_INITIAL_PUNCTUATION)
-#define UNICODE_PF (UNICODE_FINAL_PUNCTUATION)
-#define UNICODE_PO (UNICODE_OTHER_PUNCTUATION)
-#define UNICODE_SM (UNICODE_MATH_SYMBOL)
-#define UNICODE_SC (UNICODE_CURRENCY_SYMBOL)
-#define UNICODE_SK (UNICODE_MODIFIER_SYMBOL)
-#define UNICODE_SO (UNICODE_OTHER_SYMBOL)
-#define UNICODE_ZS (UNICODE_SPACE_SEPARATOR)
-#define UNICODE_ZL (UNICODE_LINE_SEPARATOR)
-#define UNICODE_ZP (UNICODE_PARAGRAPH_SEPARATOR)
-#define UNICODE_CC (UNICODE_CONTROL)
-#define UNICODE_CF (UNICODE_FORMAT)
-#define UNICODE_CS (UNICODE_SURROGATE)
-#define UNICODE_CO (UNICODE_PRIVATE_USE)
-#define UNICODE_CN (UNICODE_UNASSIGNED)
+typedef struct MuProperties MuProperties;
 
-typedef struct Unicode_properties Unicode_properties;
+char32_t mu_utf8_next(const char** utf8);
 
-char32_t unicode_utf8_next(const char** utf8);
+size_t mu_cp_utf8_length(char32_t cp);
 
-size_t unicode_cp_utf8_length(char32_t cp);
+const MuProperties* mu_cp_properties(char32_t cp);
 
-const Unicode_properties* unicode_cp_properties(char32_t cp);
+const char* mu_properties_name(const MuProperties* properties);
 
-const char* unicode_properties_name(const Unicode_properties* properties);
+MuCategory mu_properties_category(const MuProperties* properties);
 
-Unicode_general_category unicode_properties_general_category(const Unicode_properties* properties);
+bool mu_properties_is_uppercase(const MuProperties* properties);
 
-bool unicode_properties_is_uppercase(const Unicode_properties* properties);
-
-bool unicode_properties_is_lowercase(const Unicode_properties* properties);
-
-bool unicode_properties_is_other_uppercase(const Unicode_properties* properties);
-
-bool unicode_properties_is_other_lowercase(const Unicode_properties* properties);
+bool mu_properties_is_lowercase(const MuProperties* properties);
 
 #endif
