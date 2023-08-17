@@ -1,3 +1,5 @@
+override CFLAGS := -pedantic-errors -Wall -Wextra $(CFLAGS)
+
 .PHONY: all
 all: main
 
