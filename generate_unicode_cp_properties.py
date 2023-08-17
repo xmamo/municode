@@ -118,17 +118,10 @@ if __name__ == '__main__':
         f.write('static const _Unicode_properties_table _unicode_properties_tables[] = {\n')
 
         for i, table in enumerate(tables):
-            while True:
-                updated = False
-
-                for j in range(len(table) - 1, -1, -1):
-                    if table[j].general_category in ['SURROGATE', 'PRIVATE_USE', 'UNASSIGNED']:
-                        del table[j]
-                        updated = True
-                    else:
-                        break
-
-                if not updated:
+            for j in range(len(table) - 1, -1, -1):
+                if table[j].general_category in ['SURROGATE', 'PRIVATE_USE', 'UNASSIGNED']:
+                    del table[j]
+                else:
                     break
 
             if table == []:
@@ -137,7 +130,7 @@ if __name__ == '__main__':
                 f.write(f'  {{{len(table)}, (const Unicode_properties[]){{\n')
 
                 for cp, properties in enumerate(table):
-                    f.write(f'    /* U+{((i << 16) | cp):04X} */  {properties},\n')
+                    f.write(f'    /* U+{((i << 16) | cp):04X} */ {properties},\n')
 
                 f.write('  }},\n')
 
