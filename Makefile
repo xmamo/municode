@@ -17,9 +17,9 @@ ucd.all.grouped.zip:
 	wget --timestamping https://www.unicode.org/Public/UCD/latest/ucdxml/ucd.all.grouped.zip
 
 .PHONY: clean
-clean:
-	rm -f ucd.all.grouped.xml unicode_cp_properties.inc *.o main
-
-.PHONY: clean!
-clean!: clean
+clean: mostlyclean
 	rm -f ucd.all.grouped.zip
+
+.PHONY: mostlyclean
+mostlyclean:
+	rm -f ucd.all.grouped.xml unicode_cp_properties.inc *.o main
