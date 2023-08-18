@@ -57,7 +57,7 @@ class Properties:
 
     def __str__(self) -> str:
         name = 'NULL' if self.name is None else f'"{self.name}"'
-        general_catrgory = '-1' if self.category is None else f'MU_{self.category}'
+        general_catrgory = '0' if self.category is None else f'MU_{self.category}'
         other_uppercase = str(self.is_other_uppercase).lower()
         other_lowercase = str(self.is_other_lowercase).lower()
         return f'{{{name}, {general_catrgory}, {other_uppercase}, {other_lowercase}}}'

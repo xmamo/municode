@@ -45,7 +45,7 @@ const char* mu_cp_name(char32_t cp) {
 
 MuCategory mu_cp_category(char32_t cp) {
   const MuProperties* properties = mu_cp_properties(cp);
-  return properties != NULL ? mu_properties_category(properties) : -1;
+  return properties != NULL ? mu_properties_category(properties) : 0;
 }
 
 bool mu_cp_is_uppercase(char32_t cp) {

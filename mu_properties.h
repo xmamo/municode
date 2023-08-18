@@ -7,7 +7,7 @@
 typedef uint_least32_t char32_t;
 
 typedef enum MuCategory {
-  MU_UPPERCASE_LETTER,
+  MU_UPPERCASE_LETTER = 1,
   MU_LOWERCASE_LETTER,
   MU_TITLECASE_LETTER,
   MU_MODIFIER_LETTER,
