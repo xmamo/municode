@@ -1,6 +1,6 @@
 #include "mu_utf8.h"
 
-char32_t (mu_utf8_next)(const char** utf8) {
+char32_t mu_utf8_next(const char* utf8, size_t* i) {
   static const int TABLE[][3] = {
     {0x80, 0x00, 0x7F},
     {0xE0, 0xC0, 0x1F},
@@ -8,22 +8,22 @@ char32_t (mu_utf8_next)(const char** utf8) {
     {0xF8, 0xF0, 0x07},
   };
 
-  for (size_t i = 0; i < sizeof(TABLE) / sizeof(*TABLE); ++i) {
-    if (((*utf8)[0] & TABLE[i][0]) == TABLE[i][1]) {
-      size_t length = i + 1;
-      char32_t cp = (*utf8)[0] & TABLE[i][2];
+  for (size_t j = 0; j < sizeof(TABLE) / sizeof(*TABLE); ++j) {
+    if ((utf8[*i] & TABLE[j][0]) == TABLE[j][1]) {
+      size_t length = j + 1;
+      char32_t cp = utf8[*i] & TABLE[j][2];
 
-      for (size_t i = 1; i < length; ++i) {
-        if (((*utf8)[i] & 0xC0) != 0x80)
+      for (size_t k = 1; k < length; ++k) {
+        if ((utf8[*i + k] & 0xC0) != 0x80)
           return -1;
 
-        cp = (cp << 6) | ((*utf8)[i] & 0x3F);
+        cp = (cp << 6) | (utf8[*i + k] & 0x3F);
       }
 
       if (length != mu_cp_utf8_length(cp))
         return -1;
 
-      *utf8 += length;
+      *i += length;
       return cp;
     }
   }

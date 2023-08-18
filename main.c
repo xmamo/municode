@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "mu.h"
+#include <stdio.h>
 
 int main(int argc, char** argv) {
   (void)argc;
@@ -20,8 +21,8 @@ int main(int argc, char** argv) {
   };
 
   for (size_t i = 0; i < sizeof(TABLE) / sizeof(*TABLE); ++i) {
-    const char* string = TABLE[i].string;
-    assert(mu_utf8_next(&string) == TABLE[i].cp);
+    size_t j = 0;
+    assert(mu_utf8_next(TABLE[i].string, &j) == TABLE[i].cp);
   }
 
   assert(mu_cp_is_uppercase('A'));
