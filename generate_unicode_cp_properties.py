@@ -1,20 +1,21 @@
 import re
 import xml.etree.ElementTree as ET
+from dataclasses import dataclass
 from typing import Optional
 
 
+@dataclass
 class Properties:
-    def __init__(self) -> None:
-        self.name = None
-        self.general_category = None
-        self.other_uppercase = False
-        self.other_lowercase = False
+    name: Optional[str] = None
+    category: Optional[str] = None
+    is_other_uppercase: bool = False
+    is_other_lowercase: bool = False
 
     def set_name(self, name: str) -> None:
         self.name = name if name != '' else None
 
-    def set_general_category(self, general_category: str) -> None:
-        self.general_category = {
+    def set_category(self, category: str) -> None:
+        self.category = {
             'Lu': 'UPPERCASE_LETTER',
             'Ll': 'LOWERCASE_LETTER',
             'Lt': 'TITLECASE_LETTER',
@@ -46,19 +47,19 @@ class Properties:
             'Co': 'PRIVATE_USE',
             'Cn': 'UNASSIGNED',
             '': None,
-        }[general_category]
+        }[category]
 
-    def set_other_uppercase(self, other_uppercase: str) -> None:
-        self.other_uppercase = {'N': False, 'Y': True}[other_uppercase]
+    def set_is_other_uppercase(self, is_other_uppercase: str) -> None:
+        self.is_other_uppercase = {'N': False, 'Y': True}[is_other_uppercase]
 
-    def set_other_lowercase(self, other_lowercase: str) -> None:
-        self.other_lowercase = {'N': False, 'Y': True}[other_lowercase]
+    def set_is_other_lowercase(self, is_other_lowercase: str) -> None:
+        self.is_other_lowercase = {'N': False, 'Y': True}[is_other_lowercase]
 
     def __str__(self) -> str:
         name = 'NULL' if self.name is None else f'"{self.name}"'
-        general_catrgory = '-1' if self.general_category is None else f'MU_{self.general_category}'
-        other_uppercase = str(self.other_uppercase).lower()
-        other_lowercase = str(self.other_lowercase).lower()
+        general_catrgory = '-1' if self.category is None else f'MU_{self.category}'
+        other_uppercase = str(self.is_other_uppercase).lower()
+        other_lowercase = str(self.is_other_lowercase).lower()
         return f'{{{name}, {general_catrgory}, {other_uppercase}, {other_lowercase}}}'
 
 
@@ -71,18 +72,18 @@ def handle_code_point(
     first_cp = ''
     last_cp = ''
     name = ''
-    general_category = ''
-    other_uppercase = ''
-    other_lowercase = ''
+    category = ''
+    is_other_uppercase = ''
+    is_other_lowercase = ''
 
     for element in [code_point] if group is None else [group, code_point]:
         cp = element.get('cp', cp)
         first_cp = element.get('first-cp', first_cp)
         last_cp = element.get('last-cp', last_cp)
         name = element.get('na', name)
-        general_category = element.get('gc', general_category)
-        other_uppercase = element.get('OUpper', other_uppercase)
-        other_lowercase = element.get('OLower', other_lowercase)
+        category = element.get('gc', category)
+        is_other_uppercase = element.get('OUpper', is_other_uppercase)
+        is_other_lowercase = element.get('OLower', is_other_lowercase)
 
     if cp != '':
         cp = int(cp, 16)
@@ -98,9 +99,9 @@ def handle_code_point(
     for cp in range(first_cp, last_cp + 1):
         properties = properties_tables[cp >> 16][cp & 0xFFFF]
         properties.set_name(name.replace('#', f'{cp:04X}'))
-        properties.set_general_category(general_category)
-        properties.set_other_uppercase(other_uppercase)
-        properties.set_other_lowercase(other_lowercase)
+        properties.set_category(category)
+        properties.set_is_other_uppercase(is_other_uppercase)
+        properties.set_is_other_lowercase(is_other_lowercase)
 
 
 if __name__ == '__main__':
@@ -119,7 +120,8 @@ if __name__ == '__main__':
 
         for i, table in enumerate(tables):
             for j in range(len(table) - 1, -1, -1):
-                if table[j].general_category in ['SURROGATE', 'PRIVATE_USE', 'UNASSIGNED']:
+                if table[j].category in ['SURROGATE', 'PRIVATE_USE', 'UNASSIGNED']:
+                    assert table[j] == Properties(category=(table[j].category))
                     del table[j]
                 else:
                     break
