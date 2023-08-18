@@ -5,7 +5,9 @@ all: main
 
 main: main.o mu_utf8.o mu_properties.o
 
-mu_properties.o: mu.h mu_properties.inc
+mu_utf8.o: mu_utf8.h
+
+mu_properties.o: mu_properties.h mu_properties.inc
 
 mu_properties.inc: generate_mu_properties.py ucd.all.grouped.xml
 	python3 generate_mu_properties.py

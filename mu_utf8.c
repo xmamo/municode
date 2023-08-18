@@ -1,6 +1,6 @@
 #include "mu_utf8.h"
 
-char32_t mu_utf8_next(const char** utf8) {
+char32_t (mu_utf8_next)(const char** utf8) {
   static const int TABLE[][3] = {
     {0x80, 0x00, 0x7F},
     {0xE0, 0xC0, 0x1F},
