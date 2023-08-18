@@ -117,6 +117,8 @@ if __name__ == '__main__':
 
     with open('mu_properties.inc', 'w') as f:
         f.write('static const _PropertiesTable _PROPERTIES_TABLES[] = {\n')
+        private_use = None
+        unassigned = None
 
         for i, table in enumerate(tables):
             for j in range(len(table) - 1, -1, -1):
@@ -131,9 +133,17 @@ if __name__ == '__main__':
             else:
                 f.write(f'  {{{len(table)}, (const MuProperties[]){{\n')
 
-                for cp, properties in enumerate(table):
-                    f.write(f'    /* U+{((i << 16) | cp):04X} */ {properties},\n')
+                for j, properties in enumerate(table):
+                    f.write(f'    /* U+{((i << 16) | j):04X} */ {properties},\n')
+                    private_use = (i, j) if private_use is None and properties.category == 'PRIVATE_USE' else private_use
+                    unassigned = (i, j) if unassigned is None and properties.category == 'UNASSIGNED' else unassigned
 
                 f.write('  }},\n')
 
-        f.write('};\n')
+        f.write('};\n\n')
+
+        assert private_use is not None
+        f.write(f'#define _PROPERTIES_PRIVATE_USE (_PROPERTIES_TABLES[{private_use[0]}].head + 0x{private_use[1]:04X})\n')
+
+        assert unassigned is not None
+        f.write(f'#define _PROPERTIES_UNASSIGNED (_PROPERTIES_TABLES[{unassigned[0]}].head + 0x{unassigned[1]:04X})\n')

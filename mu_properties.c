@@ -16,12 +16,6 @@ typedef struct _PropertiesTable {
 
 #include "mu_properties.inc"
 
-static const MuProperties _PROPERTIES_PRIVATE_USE =
-  {NULL, MU_PRIVATE_USE, false, false};
-
-static const MuProperties _PROPERTIES_UNASSIGNED =
-  {NULL, MU_UNASSIGNED, false, false};
-
 const MuProperties* mu_cp_properties(char32_t cp) {
   if (cp > 0x10FFFF)
     return NULL;
@@ -36,12 +30,12 @@ const MuProperties* mu_cp_properties(char32_t cp) {
   }
 
   if (cp >= 0xF0000 && cp < 0xFFFFE)
-    return &_PROPERTIES_PRIVATE_USE;
+    return _PROPERTIES_PRIVATE_USE;
 
   if (cp >= 0x100000 && cp < 0x10FFFE)
-    return &_PROPERTIES_PRIVATE_USE;
+    return _PROPERTIES_PRIVATE_USE;
 
-  return &_PROPERTIES_UNASSIGNED;
+  return _PROPERTIES_UNASSIGNED;
 }
 
 const char* mu_cp_name(char32_t cp) {
