@@ -44,6 +44,26 @@ const MuProperties* mu_cp_properties(char32_t cp) {
   return &_PROPERTIES_UNASSIGNED;
 }
 
+const char* mu_cp_name(char32_t cp) {
+  const MuProperties* properties = mu_cp_properties(cp);
+  return properties != NULL ? mu_properties_name(properties) : NULL;
+}
+
+MuCategory mu_cp_category(char32_t cp) {
+  const MuProperties* properties = mu_cp_properties(cp);
+  return properties != NULL ? mu_properties_category(properties) : -1;
+}
+
+bool mu_cp_is_uppercase(char32_t cp) {
+  const MuProperties* properties = mu_cp_properties(cp);
+  return properties != NULL && mu_properties_is_uppercase(properties);
+}
+
+bool mu_cp_is_lowercase(char32_t cp) {
+  const MuProperties* properties = mu_cp_properties(cp);
+  return properties != NULL && mu_properties_is_lowercase(properties);
+}
+
 const char* mu_properties_name(const MuProperties* properties) {
   return properties->name;
 }

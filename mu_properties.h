@@ -43,6 +43,14 @@ typedef struct MuProperties MuProperties;
 
 const MuProperties* mu_cp_properties(char32_t cp);
 
+const char* mu_cp_name(char32_t cp);
+
+MuCategory mu_cp_category(char32_t cp);
+
+bool mu_cp_is_uppercase(char32_t cp);
+
+bool mu_cp_is_lowercase(char32_t cp);
+
 const char* mu_properties_name(const MuProperties* properties);
 
 MuCategory mu_properties_category(const MuProperties* properties);

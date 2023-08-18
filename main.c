@@ -24,8 +24,8 @@ int main(int argc, char** argv) {
     assert(mu_utf8_next(&string) == TABLE[i].cp);
   }
 
-  assert(mu_properties_is_uppercase(mu_cp_properties('A')));
-  assert(mu_properties_is_lowercase(mu_cp_properties('a')));
+  assert(mu_cp_is_uppercase('A'));
+  assert(mu_cp_is_lowercase('a'));
 
   return EXIT_SUCCESS;
 }
