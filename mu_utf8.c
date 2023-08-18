@@ -23,7 +23,7 @@ char32_t (mu_utf8_next)(const char** utf8) {
       if (length != mu_cp_utf8_length(cp))
         return -1;
 
-      utf8 += length;
+      *utf8 += length;
       return cp;
     }
   }
