@@ -115,7 +115,7 @@ if __name__ == '__main__':
             for code_point in element.iterfind('*'):
                 handle_code_point(code_point, tables, element)
 
-    with open('unicode_cp_properties.inc', 'w') as f:
+    with open('mu_properties.inc', 'w') as f:
         f.write('static const _PropertiesTable _PROPERTIES_TABLES[] = {\n')
 
         for i, table in enumerate(tables):

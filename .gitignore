@@ -4,6 +4,6 @@
 /main
 /ucd.all.grouped.xml
 /ucd.all.grouped.zip
-/unicode_cp_properties.inc
+/mu_properties.inc
 
 .DS_STORE

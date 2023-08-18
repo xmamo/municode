@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "unicode.h"
+#include "mu.h"
 
 int main(int argc, char** argv) {
   (void)argc;

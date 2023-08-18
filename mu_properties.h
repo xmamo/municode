@@ -1,8 +1,7 @@
-#ifndef UNICODE_H
-#define UNICODE_H
+#ifndef MU_PROPERTIES_H
+#define MU_PROPERTIES_H
 
 #include <stdbool.h>
-#include <stddef.h>
 #include <stdint.h>
 
 typedef uint_least32_t char32_t;
@@ -41,10 +40,6 @@ typedef enum MuCategory {
 } MuCategory;
 
 typedef struct MuProperties MuProperties;
-
-char32_t mu_utf8_next(const char** utf8);
-
-size_t mu_cp_utf8_length(char32_t cp);
 
 const MuProperties* mu_cp_properties(char32_t cp);
 

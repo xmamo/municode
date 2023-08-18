@@ -1,6 +1,5 @@
-#include "unicode.h"
+#include "mu_properties.h"
 
-#include <stdbool.h>
 #include <stddef.h>
 
 struct MuProperties {
@@ -15,7 +14,7 @@ typedef struct _PropertiesTable {
   const MuProperties* const head;
 } _PropertiesTable;
 
-#include "unicode_cp_properties.inc"
+#include "mu_properties.inc"
 
 static const MuProperties _PROPERTIES_PRIVATE_USE =
   {NULL, MU_PRIVATE_USE, false, false};

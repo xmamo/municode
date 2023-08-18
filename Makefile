@@ -3,12 +3,12 @@ override CFLAGS := -pedantic-errors -Wall -Wextra $(CFLAGS)
 .PHONY: all
 all: main
 
-main: main.o unicode.o unicode_cp_properties.o
+main: main.o mu_utf8.o mu_properties.o
 
-unicode_cp_properties.o: unicode.h unicode_cp_properties.inc
+mu_properties.o: mu.h mu_properties.inc
 
-unicode_cp_properties.inc: generate_unicode_cp_properties.py ucd.all.grouped.xml
-	python3 generate_unicode_cp_properties.py
+mu_properties.inc: generate_mu_properties.py ucd.all.grouped.xml
+	python3 generate_mu_properties.py
 
 ucd.all.grouped.xml: ucd.all.grouped.zip
 	unzip -uo ucd.all.grouped.zip
@@ -22,4 +22,4 @@ clean: mostlyclean
 
 .PHONY: mostlyclean
 mostlyclean:
-	rm -f ucd.all.grouped.xml unicode_cp_properties.inc *.o main
+	rm -f ucd.all.grouped.xml mu_properties.inc *.o main

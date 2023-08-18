@@ -1,4 +1,4 @@
-#include "unicode.h"
+#include "mu_utf8.h"
 
 char32_t mu_utf8_next(const char** utf8) {
   static const int TABLE[][3] = {
